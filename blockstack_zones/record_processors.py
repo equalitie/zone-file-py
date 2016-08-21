@@ -1,4 +1,5 @@
 import copy
+from builtins import range
 
 
 def process_origin(data, template):
@@ -81,7 +82,7 @@ def quote_field(data, field):
         return None 
 
     data_dup = copy.deepcopy(data)
-    for i in xrange(0, len(data_dup)):
+    for i in range(0, len(data_dup)):
         data_dup[i][field] = '"%s"' % data_dup[i][field]
         data_dup[i][field] = data_dup[i][field].replace(";", "\;")
 
@@ -107,7 +108,7 @@ def process_rr(data, record_type, record_keys, field, template):
     assert type(data) == list, "Data must be a list"
 
     record = ""
-    for i in xrange(0, len(data)):
+    for i in range(0, len(data)):
 
         for record_key in record_keys:
             assert record_key in data[i].keys(), "Missing '%s'" % record_key
