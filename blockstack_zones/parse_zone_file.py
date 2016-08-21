@@ -70,6 +70,7 @@ def make_parser():
     make_rr_subparser(subparsers, "A", [("ip", str)])
     make_rr_subparser(subparsers, "AAAA", [("ip", str)])
     make_rr_subparser(subparsers, "CNAME", [("alias", str)])
+    make_rr_subparser(subparsers, "ALIAS", [("host", str)])
     make_rr_subparser(subparsers, "MX", [("preference", str), ("host", str)])
     make_rr_subparser(subparsers, "TXT", [("txt", str)])
     make_rr_subparser(subparsers, "PTR", [("host", str)])
