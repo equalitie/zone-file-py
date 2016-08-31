@@ -31,7 +31,7 @@ def process_soa(data, template):
     record = template[:]
 
     if data is not None:
-    
+
         assert len(data) == 1, "Only support one SOA RR at this time"
         data = data[0]
 
@@ -46,8 +46,8 @@ def process_soa(data, template):
         soadat.append(data_name)
 
         if data.get('ttl') is not None:
-            soadat.append( str(data['ttl']) )
-  
+            soadat.append(str(data['ttl']))
+
         soadat.append("IN")
         soadat.append("SOA")
 
@@ -67,7 +67,7 @@ def process_soa(data, template):
         record = record.replace("{soa}", soa_txt)
 
     else:
-        # clear all SOA fields 
+        # clear all SOA fields
         record = record.replace("{soa}", "")
 
     return record
@@ -79,7 +79,7 @@ def quote_field(data, field):
     Return the new data records.
     """
     if data is None:
-        return None 
+        return None
 
     data_dup = copy.deepcopy(data)
     for i in range(0, len(data_dup)):
@@ -114,9 +114,9 @@ def process_rr(data, record_type, record_keys, field, template):
             assert record_key in data[i].keys(), "Missing '%s'" % record_key
 
         record_data = []
-        record_data.append( str(data[i].get('name', '@')) )
+        record_data.append(str(data[i].get('name', '@')))
         if data[i].get('ttl') is not None:
-            record_data.append( str(data[i]['ttl']) )
+            record_data.append(str(data[i]['ttl']))
 
         record_data.append(record_type)
         record_data += [str(data[i][record_key]) for record_key in record_keys]
@@ -194,6 +194,6 @@ def process_uri(data, template):
     """
     Replace {uri} in templtae with the serialized URI records
     """
-    # quote target 
+    # quote target
     data_dup = quote_field(data, "target")
     return process_rr(data_dup, "URI", ["priority", "weight", "target"], "{uri}", template)
