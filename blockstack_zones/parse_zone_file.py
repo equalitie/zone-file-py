@@ -10,13 +10,10 @@ Known limitations:
     'TXT', 'SRV', 'SPF', 'URI'
 """
 
-import copy
-import datetime
-import time
 import argparse
 from collections import defaultdict
 
-from .configs import SUPPORTED_RECORDS, DEFAULT_TEMPLATE
+from .configs import SUPPORTED_RECORDS  # flake8: noqa
 from .exceptions import InvalidLineException
 
 
