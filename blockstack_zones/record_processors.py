@@ -152,6 +152,13 @@ def process_cname(data, template):
     return process_rr(data, "CNAME", "alias", "{cname}", template)
 
 
+def process_alias(data, template):
+    """
+    Replace {alias} in template with the serialized ALIAS records
+    """
+    return process_rr(data, "ALIAS", "host", "{alias}", template)
+
+
 def process_mx(data, template):
     """
     Replace {mx} in template with the serialized MX records
