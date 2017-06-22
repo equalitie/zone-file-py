@@ -1,6 +1,6 @@
 SUPPORTED_RECORDS = [
-    '$ORIGIN', '$TTL', 'SOA', 'NS', 'A', 'AAAA', 'CNAME', 'MX', 'PTR', 'TXT',
-    'SRV', 'SPF', 'URI'
+    '$ORIGIN', '$TTL', 'SOA', 'NS', 'A', 'AAAA', 'CNAME', 'ALIAS', 'MX',
+    'PTR', 'TXT', 'SRV', 'SPF', 'URI',
 ]
 
 DEFAULT_TEMPLATE = """
@@ -18,6 +18,8 @@ DEFAULT_TEMPLATE = """
 {aaaa}\n\
 \n\
 {cname}\n\
+\n\
+{alias}\n\
 \n\
 {ptr}\n\
 \n\
