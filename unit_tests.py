@@ -12,6 +12,62 @@ class ZoneFileTests(unittest.TestCase):
     def tearDown(self):
         pass
 
+    def test_zone_file_parsing_txt(self):
+        zone_file = parse_zone_file(zone_files["sample_txt_1"])
+        self.assertTrue(isinstance(zone_file, dict))
+        self.assertTrue("soa" in zone_file)
+        self.assertTrue("mx" in zone_file)
+        self.assertTrue("ns" in zone_file)
+        self.assertTrue("a" in zone_file)
+        self.assertTrue("cname" in zone_file)
+        self.assertTrue("$ttl" in zone_file)
+        self.assertTrue("$origin" in zone_file)
+        self.assertTrue("txt" in zone_file)
+        self.assertEqual(zone_file["txt"][0]["name"], "single")
+        self.assertEqual(zone_file["txt"][0]["txt"], "everything I do")
+        self.assertEqual(zone_file["txt"][1]["name"], "singleTTL")
+        self.assertEqual(zone_file["txt"][1]["ttl"], 100)
+        self.assertEqual(zone_file["txt"][1]["txt"], "everything I do")
+        self.assertEqual(zone_file["txt"][2]["name"], "multi")
+        self.assertEqual(zone_file["txt"][2]["txt"], 
+                         ["everything I do", "I do for you"])
+        self.assertEqual(zone_file["txt"][3]["name"], "multiTTL")
+        self.assertEqual(zone_file["txt"][3]["ttl"], 100)
+        self.assertEqual(zone_file["txt"][3]["txt"], 
+                         ["everything I do", "I do for you"])
+
+    def test_zone_file_creation_txt(self):
+        json_zone_file = zone_file_objects["sample_txt_1"]
+        zone_file = make_zone_file(json_zone_file)
+        print zone_file
+        self.assertTrue(isinstance(zone_file, (unicode, str)))
+        self.assertTrue("$ORIGIN" in zone_file)
+        self.assertTrue("$TTL" in zone_file)
+        self.assertTrue("@ IN SOA" in zone_file)
+
+        zone_file = parse_zone_file(zone_file)
+        self.assertTrue(isinstance(zone_file, dict))
+        self.assertTrue("soa" in zone_file)
+        self.assertTrue("mx" in zone_file)
+        self.assertTrue("ns" in zone_file)
+        self.assertTrue("a" in zone_file)
+        self.assertTrue("cname" in zone_file)
+        self.assertTrue("$ttl" in zone_file)
+        self.assertTrue("$origin" in zone_file)
+        self.assertTrue("txt" in zone_file)
+        self.assertEqual(zone_file["txt"][0]["name"], "single")
+        self.assertEqual(zone_file["txt"][0]["txt"], "everything I do")
+        self.assertEqual(zone_file["txt"][1]["name"], "singleTTL")
+        self.assertEqual(zone_file["txt"][1]["ttl"], 100)
+        self.assertEqual(zone_file["txt"][1]["txt"], "everything I do")
+        self.assertEqual(zone_file["txt"][2]["name"], "multi")
+        self.assertEqual(zone_file["txt"][2]["txt"], 
+                         ["everything I do", "I do for you"])
+        self.assertEqual(zone_file["txt"][3]["name"], "multiTTL")
+        self.assertEqual(zone_file["txt"][3]["ttl"], 100)
+        self.assertEqual(zone_file["txt"][3]["txt"], 
+                         ["everything I do", "I do for you"])        
+
     def test_zone_file_creation_1(self):
         json_zone_file = zone_file_objects["sample_1"]
         zone_file = make_zone_file(json_zone_file)
