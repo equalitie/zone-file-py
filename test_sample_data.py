@@ -9,6 +9,7 @@ pop 10800 IN CNAME access.mail.gandi.net.
 smtp 10800 IN CNAME relay.mail.gandi.net.
 webmail 10800 IN CNAME webmail.gandi.net.
 www 10800 IN CNAME webredir.vip.gandi.net.
+aname 10800 IN ALIAS otherdomain.com.
 @ 10800 IN MX 50 fb.mail.gandi.net.
 @ 10800 IN MX 10 spool.mail.gandi.net.""",
     "sample_2": """
@@ -23,7 +24,9 @@ dns2         IN     A       10.0.1.3
 ftp          IN     CNAME   server1
 mail         IN     CNAME   server1
 mail2        IN     CNAME   server2
-www          IN     CNAME   server2""",
+www          IN     CNAME   server2
+
+aname        IN     ALIAS   otherdomain.com""",
     "sample_3": """$ORIGIN example.com
 $TTL 86400
 @     IN     SOA    dns1.example.com.     hostmaster.example.com. (
@@ -49,7 +52,9 @@ dns2         IN     A       10.0.1.3
 ftp          IN     CNAME   server1
 mail         IN     CNAME   server1
 mail2        IN     CNAME   server2
-www          IN     CNAME   server2""",
+www          IN     CNAME   server2
+
+aname        IN     ALIAS   otherdomain.com""",
     "sample_txt_1": """$ORIGIN example.com
 $TTL 86400
 @     IN     SOA    dns1.example.com.     hostmaster.example.com. (
@@ -82,7 +87,6 @@ singleTTL  100    IN     TXT     "everything I do"
 multi             IN     TXT     "everything I do" "I do for you"
 multiTTL  100     IN     TXT     "everything I do" "I do for you"
 """
-
 }
 
 zone_file_objects = {
@@ -126,6 +130,9 @@ zone_file_objects = {
         { "name": "mail1", "alias": "mail" },
         { "name": "mail2", "alias": "mail" }
     ],
+    "alias":[
+        { "name": "aname", "host": "otherdomain.com"}
+    ],
     "mx": [
         { "preference": 0, "host": "mail1" },
         { "preference": 10, "host": "mail2" }
@@ -167,6 +174,9 @@ zone_file_objects = {
     "cname":[
         { "name": "mail1", "alias": "mail" },
         { "name": "mail2", "alias": "mail" }
+    ],
+    "alias":[
+        { "name": "aname", "host": "otherdomain.com"}
     ],
     "mx":[
         { "preference": 0, "host": "mail1" },

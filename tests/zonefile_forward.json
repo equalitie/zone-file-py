@@ -27,6 +27,9 @@
         { "name": "mail1", "alias": "mail" },
         { "name": "mail2", "alias": "mail" }
     ],
+    "ALIAS":[
+        { "name": "aname", "alias": "otherdomain.com"}
+    ],
     "MX":[
         { "preference": 0, "host": "mail1" },
         { "preference": 10, "host": "mail2" }
