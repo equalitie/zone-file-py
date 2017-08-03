@@ -38,11 +38,23 @@ def make_rr_subparser(subparsers, rec_type, args_and_types):
     sp.add_argument("ttl", type=int, nargs='?')
     sp.add_argument(rec_type, type=str)
 
-    for (argname, argtype) in args_and_types:
-        sp.add_argument(argname, type=argtype)
-
+    for my_spec in args_and_types:
+        (argname, argtype) = my_spec[:2]
+        if len(my_spec) > 2:
+            nargs = my_spec[2]
+            sp.add_argument(argname, type=argtype, nargs=nargs)
+        else:
+            sp.add_argument(argname, type=argtype)
     return sp
 
+def make_txt_subparser(subparsers):
+    sp = subparsers.add_parser("TXT")
+
+    sp.add_argument("name", type=str)
+    sp.add_argument("--ttl", type=int)
+    sp.add_argument("TXT", type=str)
+    sp.add_argument("txt", type=str, nargs='+')
+    return sp
 
 def make_parser():
     """
@@ -72,7 +84,7 @@ def make_parser():
     make_rr_subparser(subparsers, "CNAME", [("alias", str)])
     make_rr_subparser(subparsers, "ALIAS", [("host", str)])
     make_rr_subparser(subparsers, "MX", [("preference", str), ("host", str)])
-    make_rr_subparser(subparsers, "TXT", [("txt", str)])
+    make_txt_subparser(subparsers)
     make_rr_subparser(subparsers, "PTR", [("host", str)])
     make_rr_subparser(subparsers, "SRV", [("priority", int), ("weight", int), ("port", int), ("target", str)])
     make_rr_subparser(subparsers, "SPF", [("data", str)])
@@ -299,15 +311,20 @@ def parse_line(parser, record_token, parsed_records):
     elif len(record_token) >= 3 and record_token[2] in SUPPORTED_RECORDS:
         # with ttl
         record_token = [record_token[2]] + record_token
-
+        if record_token[0] == "TXT":
+            record_token = record_token[:2] + ["--ttl"] + record_token[2:]
     try:
         rr, unmatched = parser.parse_known_args(record_token)
         assert len(unmatched) == 0, "Unmatched fields: %s" % unmatched
     except (SystemExit, AssertionError, InvalidLineException):
+        import traceback
+        traceback.print_exc()
         # invalid argument 
         raise InvalidLineException(line)
 
     record_dict = rr.__dict__
+    if record_token[0] == "TXT" and len(record_dict['txt']) == 1:
+        record_dict['txt'] = record_dict['txt'][0]
 
     # what kind of record? including origin and ttl
     record_type = None

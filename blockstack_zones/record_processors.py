@@ -177,9 +177,18 @@ def process_txt(data, template):
     """
     Replace {txt} in template with the serialized TXT records
     """
-    # quote txt
-    data_dup = quote_field(data, "txt")
-    return process_rr(data_dup, "TXT", "txt", "{txt}", template)
+    if data is None:
+        to_process = None
+    else:
+        # quote txt
+        to_process = copy.deepcopy(data)
+        for datum in to_process:
+            if isinstance(datum["txt"], list):
+                datum["txt"] = " ".join(['"%s"' % entry.replace(";", "\;")
+                                         for entry in datum["txt"]])
+            else:
+                datum["txt"] = '"%s"' % datum["txt"].replace(";", "\;")
+    return process_rr(to_process, "TXT", "txt", "{txt}", template)
 
 
 def process_srv(data, template):
