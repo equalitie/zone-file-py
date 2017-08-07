@@ -10,6 +10,7 @@ Known limitations:
     'TXT', 'SRV', 'SPF', 'URI'
 """
 
+import os
 import copy
 import datetime
 import time
@@ -317,8 +318,10 @@ def parse_line(parser, record_token, parsed_records):
         rr, unmatched = parser.parse_known_args(record_token)
         assert len(unmatched) == 0, "Unmatched fields: %s" % unmatched
     except (SystemExit, AssertionError, InvalidLineException):
-        import traceback
-        traceback.print_exc()
+        if os.environ.get("BLOCKSTACK_DEBUG", None) == "1":
+            import traceback
+            traceback.print_exc()
+
         # invalid argument 
         raise InvalidLineException(line)
 
